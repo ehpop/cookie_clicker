@@ -4,7 +4,9 @@ import time
 import datetime as dt
 
 cookie_position = (300, 503)
+
 upgrade_line = (1676, 327, 1686, 900)
+upgrade_line_scrolled = (1676, 270, 1686, 1000)
 
 notification_check_pos = (1121, 1018)
 notification_check_color = [10, 10, 10]
@@ -111,13 +113,14 @@ def get_pixel(pix: ()):
     return px
 
 
-def upgrade_passive_income_from_bottom():
+def upgrade_passive_income_from_top():
     # upgrade_scan_screen.show()
     # upper_upgrade_scan_screen.show()
 
+    scroll_to_top()
+
     screen_arr = get_array_picture(upgrade_line)
     column = row = 0
-    print(len(screen_arr[0]), len(screen_arr))
     while column < len(screen_arr[0]):
         row = 0
         while row < len(screen_arr):
@@ -128,6 +131,28 @@ def upgrade_passive_income_from_bottom():
                 row -= 64  # we will check that same upgrade again
                 screen_arr = get_array_picture(upgrade_line)  # we take another screenshot
             row += 64
+        column += 1
+
+
+def upgrade_passive_income_from_bottom():
+    # upgrade_scan_screen.show()
+    # upper_upgrade_scan_screen.show()
+
+    scroll_to_bottom()
+
+    screen_arr = get_array_picture(upgrade_line_scrolled)
+    column = 0
+    row = 729
+    while column < len(screen_arr[1]):
+        row = 729
+        while row > upgrade_line_scrolled[1]:
+            color = screen_arr[row][column]
+            if (color == [255, 255, 255]).all():
+                (start_width, start_height, *rest) = upgrade_line_scrolled
+                pyautogui.click(start_width + column, start_height + row)
+                row += 64  # we will check that same upgrade again
+                screen_arr = get_array_picture(upgrade_line_scrolled)  # we take another screenshot
+            row -= 64
         column += 1
 
 
@@ -144,7 +169,7 @@ def upgrade_click_income():
 def click_cookie(mouse_x, clicks_to_perform=10):
     pyautogui.click(cookie_position[0], cookie_position[1], clicks=clicks_to_perform, interval=0.001)
 
-    if mouse_x >= 0:
+    if mouse_x > 0:
         return clicks_to_perform
     else:
         return -1
@@ -200,18 +225,20 @@ def hide_board():
         pyautogui.click(hide_display_feature_scan_location[0], hide_display_feature_scan_location[1])
 
 
-def run_upgrades(passive, active, golden_cookie, close_notification=True, hide_boards=False, upgrades_from_top=True):
+def run_upgrades(passive, active, golden_cookie, close_notification=True, hide_boards=False, upgrades_from='From Bottom'):
     default_result = 0
     golden_cookie_was_clicked = -2
 
     if active:
         upgrade_click_income()
 
-    if passive and upgrades_from_top:
-        upgrade_passive_income_from_top()
-
-    if passive and not upgrades_from_top:
-        upgrade_passive_income_from_bottom()
+    if passive:
+        if upgrades_from == 'From Top':
+            upgrade_passive_income_from_top()
+            print('topped')
+        elif upgrades_from == 'From Bottom':
+            print('bottomed')
+            upgrade_passive_income_from_bottom()
 
     if close_notification:
         close_notifications()
@@ -231,19 +258,20 @@ def scroll_to_bottom():
     scroll_wrap(bottom_scroll_position[0], bottom_scroll_position[1], scroll_amount)
     pyautogui.scroll(abs(scroll_amount_per_one_field))
 
+
 def scroll_to_top():
     scroll_wrap(bottom_scroll_position[0], bottom_scroll_position[1], 1000)
 
 
 def run_clicker_single(cookies_clicked, passive=False, active=False, golden_cookie=False, hide_boards=False,
-                       close_notification=False, upgrades_from_top=True, log_frequency=100):
+                       close_notification=False, upgrades_from='From Bottom', log_frequency=100):
     result_upgrades = run_upgrades(passive=passive,
                                    active=active,
                                    golden_cookie=not (cookies_clicked % 500) and golden_cookie,
                                    # doing it that way doesn't scan every single time
                                    hide_boards=not (cookies_clicked % 10_000) and hide_boards,
                                    close_notification=not (cookies_clicked % 10_000) and close_notification,
-                                   upgrades_from_top=upgrades_from_top
+                                   upgrades_from=upgrades_from
                                    )
 
     if result_upgrades == -2:  # quits loop, -2 is golden cookie signal
@@ -264,18 +292,9 @@ def run_clicker_single(cookies_clicked, passive=False, active=False, golden_cook
     return cookies_clicked
 
 
-def main():
-    hide_board()
-
-    # run_clicker()
-    # x, y = pyautogui.position()
-    # while x < 0:
-    #     x, y = pyautogui.position()
-    #     print(x, y)
-    # main()
-    # click_golden_cookie_on_screen()
-    # print(is_golden_cookie_on_screen())
+def test_main():
+    scroll_to_bottom()
 
 
 if __name__ == '__main__':
-    main()
+    test_main()

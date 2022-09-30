@@ -25,7 +25,7 @@ layout = [
     ]
 ]
 
-window = sG.Window("Auto Clicker", layout, resizable=True, size=(720, 480), background_color="#1F1F1F", icon='res/logo.ico')
+window = sG.Window("Auto Cookie Clicker", layout, resizable=True, size=(720, 480), background_color="#1F1F1F", icon='res/logo.ico')
 
 
 def run_clicker_loop(settings: {}):
@@ -39,7 +39,7 @@ def run_clicker_loop(settings: {}):
                                                 golden_cookie=not settings['golden-cookie-search'] == 'False',
                                                 hide_boards=not settings['clear-board'] == 'False',
                                                 close_notification=not settings['clear-notification'] == 'False',
-                                                upgrades_from_top=not settings['direction-upgrades'] == 'From Bottom',
+                                                upgrades_from=settings['direction-upgrades'],
                                                 log_frequency=int(settings['log-frequency']))
 
         if res == -1:
@@ -105,7 +105,7 @@ def main():
 
         if event == "RUN":
             msg = ac.write_to_log(amount_of_clicks=100, add_separator=True, write_to_file=False)
-            window["-LOG-"].update(msg, append=True)
+            window["-LOG-"].update(msg + 'TO STOP PROGRAM DRAG MOUSE TO THE LEFT\n', append=True)
             window.refresh()
 
             result = run_clicker_loop(settings)
