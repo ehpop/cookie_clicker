@@ -15,12 +15,12 @@ golden_cookie_scan = (0, 225, 1567, 1028)
 upper_upgrade_right_corner = (1661, 197)
 
 golden_cookie_active_location_1 = (531, 144)
-golden_cookie_active_location_2 = (0, 761)
+golden_cookie_active_location_2 = (569, 141)
 
 upper_upgrade_ready_color = [169, 130, 64]
 golden_cookie_color = [202, 169, 81]
 active_upgrade_color_check_1 = [25, 81, 129]
-active_upgrade_color_check_2 = [255, 225, 135]
+active_upgrade_color_check_2 = [228, 190, 151]
 
 bottom_scroll_position = (1920 - 10, 138)
 scroll_amount_per_one_field = -80
@@ -192,8 +192,7 @@ def click_golden_cookie_on_screen():
 
 
 def is_golden_cookie_active():
-    return get_pixel(golden_cookie_active_location_1) == active_upgrade_color_check_1 \
-           and get_pixel(golden_cookie_active_location_2) == active_upgrade_color_check_2
+    return get_pixel(golden_cookie_active_location_2) == active_upgrade_color_check_2
 
 
 def is_notification_up():

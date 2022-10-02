@@ -2,7 +2,7 @@ import PySimpleGUI
 import PySimpleGUI as sG
 import pyautogui
 import auto_clicker as ac
-
+import settings as sett
 
 control_panel_run = [
     [sG.Button("RUN", size=(10, 10), button_color="#75FA61", mouseover_colors="#25D900"), sG.Button("STOP", size=(10, 10), button_color="#EB3324", mouseover_colors="#F00000")],
@@ -57,7 +57,13 @@ def run_clicker_loop(settings: {}):
 
 def run():
 
-    settings = {'column-upgrades': 'False', 'direction-upgrades': 'From Bottom', 'horizontal-upgrades': 'False', 'clear-notification': 'True', 'clear-board': 'True', 'golden-cookie-search': 'True', 'log-frequency': '100'}
+    read_settings = sett.read_settings()
+    if read_settings:
+        settings = read_settings
+    else:
+        settings = {'column-upgrades': 'False', 'direction-upgrades': 'From Bottom', 'horizontal-upgrades': 'False', 'clear-notification': 'True', 'clear-board': 'True', 'golden-cookie-search': 'True', 'log-frequency': '100'}
+
+    del read_settings
 
     while True:
         event, values = window.read()
@@ -96,6 +102,7 @@ def run():
 
                 if event_s == "SAVE":
                     settings = values_s
+                    sett.save_setting(settings)
                     break
 
             settings_window.close()

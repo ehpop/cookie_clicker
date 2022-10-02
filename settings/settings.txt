@@ -1,0 +1,7 @@
+column-upgrades:True
+direction-upgrades:From Top
+horizontal-upgrades:True
+clear-notification: True
+clear-board: True
+golden-cookie-search: True
+log-frequency: 100
