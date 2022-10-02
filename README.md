@@ -1,4 +1,4 @@
-# cookie_clicker
+# cookie_clicker_bot
 
 Bot for playing cookie clicker written in python 3, using PyAutoGUI and PySimpleGUI.
 
